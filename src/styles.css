@@ -4,6 +4,7 @@ body {
   margin: 0px;
   padding: 0px;
   background: url("https://mcn-images.bauersecure.com/PageFiles/687249/CCM_Spitfire_04.jpg");
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 
