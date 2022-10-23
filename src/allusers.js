@@ -1,36 +1,37 @@
 import React,{useEffect,useState} from 'react'
 import {db} from './firebase-config'
-import { collection,getDocs,query,where } from '@firebase/firestore'
+import { collection,getDocs, query, where,updateDoc,doc } from '@firebase/firestore';
 import QRCode from "react-qr-code";
-const Id=()=>{
+const Allusers=()=>{
 
 const userCollection=collection(db,"users")
 const [user,setUsers]=useState({})
+const [list,setList]=useState([])
 const [search,setSearch]=useState("")
 const [err,setErr]=useState("")
-const [list,setList]=useState([])
+
 
   useEffect(()=>{
-  //  getUsers();
+   getUsers();
   },[])
   const getUsers=async ()=>{
+const g=query(collection(db, "users") );
 
-    const q = query(collection(db, "users"), where("idno", "==",search.replace(/(\r\n|\n|\r)/gm, "")), where("approval", "==",'approved'));
-    const data =await  getDocs(q);
-
+    const data =await  getDocs(g);
     var obju=data.docs.map((doc)=>({...doc.data(),id:doc.id}));
     console.log(obju)
-    // var result = obju.filter(obj => {
-    //   return obj.idno === search
-    // })
+    var result = obju;
+     setList(result)
     // if(result[0]!=null || typeof result[0]!="undefined"){
+    //     console.log(result)
+       
     //    setUsers(result[0])
     //    setErr("")
     // }else{
     //   setUsers({})
     //   setErr("No User with ID:"+search)
     // }
-   setList(obju)
+   
     // console.log(JSON.stringify({"data":data._userDataWriter}))
 
   }
@@ -46,23 +47,53 @@ getUsers()
     // "Stage":"Canopy",
     // "SACCO":"Canopy Bike Sacco"
     // }
-     return <div className="card2">
-      <h3>Search Motorist by ID</h3>
-     <input type="text" onChange={(e)=>{setSearch(e.target.value)}} value={search} placeholder="Enter ID Number" />
-     <button className="sub" onClick={()=>{find()}}>Submit</button>
-     <br/> <br/>
+
+    const approve= async(p,id)=>{
+      
+     const docRef = doc(db, "users", id);
+     
+const data = {
+    approval: p
+  };
+  
+ await updateDoc(docRef, data)
+  .then(docRef => {
+      console.log("A New Document Field has been added to an existing document");
+  })
+  .catch(error => {
+      console.log(error);
+  })
+
+  getUsers()
+    }
+     return <div>
+    <h3 style={{background:'white'}}>Search Account</h3>
+     <input type="text" onChange={(e)=>{setSearch(e.target.value)}} value={search} placeholder="Serach by name" />
+    {/*   <button className="sub" onClick={()=>{find()}}>Submit</button> */}
+   
      {/* <i style={{color:'green'}}>User registered !!!</i> */}
      
-    <div className="card">
-     <h3> User information</h3>
-     {err}
+  
+     <h3 style={{background:'white'}}> User information</h3>
+     {list.length==0 && <h4 style={{background:'white'}} >NO ACCOUNTS</h4>}
+     {/* {err} */}
      {/* {Object.keys(user).map((u,i)=>
-      
-      
-      
-      <div key={i} style={{margin:2,display:"flex"}}><div style={{minWidth:80}}><strong >{Object.keys(user)[i]}:{' '}</strong></div><div>{Object.values(user)[i]}</div></div>
+       <div key={i} style={{margin:2,display:"flex"}}>
+        
+        <div style={{minWidth:80}}>
+            
+            <img src={user.passport_image}  />
+            <strong >{Object.keys(user)[i]}:{' '}</strong></div><div>{Object.values(user)[i]}</div>
+        
+        
+        </div>
      )} */}
-    {list.map((user,i)=>{   return<div  style={{display:'flex',maxWidth:500}} className="card3" > 
+  <div style={{width:'100vw',display:'flex',flexWrap:'wrap',flexDirection:'row'}}>
+  {list.filter(function (el) {
+        var condition = new RegExp(search)
+  return condition.test(el.fullname);
+}).map((user,i)=>{
+        return <div key={i} style={{display:'flex',maxWidth:500}} className="card3" > 
             
             <div >
 <img style={{height:145,width:120}} src={user.passport_image}  />
@@ -117,29 +148,35 @@ getUsers()
          <div >    
              <strong >Bike no. :{' '}</strong></div><div>{user.bike}</div>
          </div>
-         {/* <div style={{margin:2,display:"flex"}}>   
-         <div >    
-             <strong >Mpesa message:{' '}</strong></div><div>{user.mpesa_msg}</div>
-         </div> */}
-       {/* <div><a href={user.idcard_image} target="_blank">
-<button>VIEW IDCARD</button>
-</a></div><br/> */}
          <div style={{margin:2,display:"flex"}}>   
          <div >    
+             <strong >Mpesa message:{' '}</strong></div><div>{user.mpesa_msg}</div>
+         </div>
+         <div style={{margin:2,display:"flex"}}>   
+         <div >    
+             <strong >Date:{' '}</strong></div><div>{user.date}</div>
+         </div>
        
+       <div><a href={user.idcard_image} target="_blank">
+<button>VIEW IDCARD</button>
+</a></div><br/>
 
-             
-             {/* <button className='sub'>Approve Account</button>
-             <button className='sub' style={{background:'red'}}>Decline Account</button> */}
+         <div style={{margin:2,display:"flex",textTransform:'uppercase'}}>   
+         <div >    
+       {user.approval=='approved' ? <strong style={{color:'green'}}>APPROVED</strong>:""}
+       {user.approval=='declined' ? <strong style={{color:'red'}}>DECLINED</strong>:""}
+       {user.approval=='pending' ? <strong style={{color:'black'}}>DECLINED</strong>:""}    
+             {/* <button className='sub' onClick={()=>{approve('approved',user.id)}}>Approve Account</button>
+             <button className='sub' style={{background:'red'}} onClick={()=>{approve('declined',user.id)}}>Decline Account</button>
+           */}
              </div>
          </div>
  
          
       </div></div>
-    })}
-
-
+     })}
+    
      </div>
        </div>
     }
-    export default Id
+    export default Allusers

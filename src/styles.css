@@ -84,6 +84,15 @@ a {
   text-align: left;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
 }
+.card3 {
+  /* width: 90%; */
+  background-color: #f8f8f8;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: left;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+}
 .card2 {
   min-height: 250px;
   /* width:60%; */
@@ -94,14 +103,22 @@ a {
   padding: 20px;
   text-align: left;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  
 }
 .sub {
   border: 0;
   background-color: #24a0ed;
   color: white;
   height: 35px;
+
 }
 input {
+  /* width: 90%; */
+  height: 30px;
+  margin: 5px;
+}
+.input {
+  width: 90%;
   height: 30px;
   margin: 5px;
 }

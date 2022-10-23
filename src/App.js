@@ -3,19 +3,29 @@ import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import Scan from './scanner'
 import Options from './options'
 import Id from './id';
-
-
+import Register from './register';
+import Pending from './pending';
+import Approved from './approved';
+import Declined from './declined'
+import Allusers from './allusers'
+import Admin from './admin'
 export default function App() {
   const url="https://i.pinimg.com/originals/d5/74/97/d574978a47ffd961b434cb5cd75f3dd2.jpg"
   return (
     <div className="App">
  
- <a href="/"> 
+ 
  {/* <img src={url} style={{height:30,height:30}}/> */}
- <div className="header">
+ <div className="header" style={{color:'black'}}>
    <div className="logo">M</div>
-   Motobike Verification</div>
- </a>
+  <a href="/"  style={{color:'black'}}>  Motobike Verification </a>
+   
+   <div style={{flex:1}}></div>
+   <div style={{alignSelf:'flex-end'}}> <a href='/register'>  <div style={{alignSelf:'flex-end',color:'black'}}>Register</div></a></div>
+
+   
+   </div>
+
  <div className="buttons">
 
    <Router>
@@ -24,7 +34,12 @@ export default function App() {
 
 <Route path="/scan" element={<Scan/>} />
 <Route path="/id" element={<Id/>} />
-
+<Route path="/register" element={<Register/>} />
+<Route path="/pending" element={<Pending/>} />
+<Route path="/approved" element={<Approved/>} />
+<Route path="/declined" element={<Declined/>} />
+<Route path="/users" element={<Allusers/>} />
+<Route path="/admin" element={<Admin/>} />
   </Routes>
    </Router>
  </div>
