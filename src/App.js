@@ -35,11 +35,11 @@ export default function App() {
 <Route path="/scan" element={<Scan/>} />
 <Route path="/id" element={<Id/>} />
 <Route path="/register" element={<Register/>} />
-<Route path="/pending" element={<Pending/>} />
-<Route path="/approved" element={<Approved/>} />
-<Route path="/declined" element={<Declined/>} />
-<Route path="/users" element={<Allusers/>} />
-<Route path="/admin" element={<Admin/>} />
+<Route path="/pending3567" element={<Pending/>} />
+<Route path="/approved3567" element={<Approved/>} />
+<Route path="/declined3567" element={<Declined/>} />
+<Route path="/users3567" element={<Allusers/>} />
+<Route path="/admin3567" element={<Admin/>} />
   </Routes>
    </Router>
  </div>
