@@ -9,10 +9,15 @@ import Approved from './approved';
 import Declined from './declined'
 import Allusers from './allusers'
 import Admin from './admin'
+import Login from './login'
+import React,{createContext, useState} from 'react';
+export const AppContext=createContext(null)
 export default function App() {
+  const [auth,setAuth]=useState(false)
   const url="https://i.pinimg.com/originals/d5/74/97/d574978a47ffd961b434cb5cd75f3dd2.jpg"
   return (
-    <div className="App">
+    <AppContext.Provider value={{auth,setAuth}}>
+    <div className="App"  style={{background:'rgba(255,255,255,0.7)',minHeight:'100vh',backdropFilter: 'blur(2px)'}}>
  
  
  {/* <img src={url} style={{height:30,height:30}}/> */}
@@ -35,14 +40,16 @@ export default function App() {
 <Route path="/scan" element={<Scan/>} />
 <Route path="/id" element={<Id/>} />
 <Route path="/register" element={<Register/>} />
-<Route path="/pending3567" element={<Pending/>} />
-<Route path="/approved3567" element={<Approved/>} />
-<Route path="/declined3567" element={<Declined/>} />
-<Route path="/users3567" element={<Allusers/>} />
-<Route path="/admin3567" element={<Admin/>} />
+<Route path="/pending" element={<Pending/>} />
+<Route path="/approved" element={<Approved/>} />
+<Route path="/declined" element={<Declined/>} />
+<Route path="/users" element={<Allusers/>} />
+<Route path="/admin" element={<Admin/>} />
+<Route path="/login" element={<Login/>} />
   </Routes>
    </Router>
  </div>
     </div>
+    </AppContext.Provider>
   );
 }

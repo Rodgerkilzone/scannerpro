@@ -1,9 +1,11 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,useContext} from 'react'
 import {db} from './firebase-config'
 import { collection,getDocs, query, where,updateDoc,doc } from '@firebase/firestore';
 import QRCode from "react-qr-code";
+import { useNavigate } from 'react-router-dom';
+import {AppContext} from './App'
 const Pending=()=>{
-
+const {auth}=useContext(AppContext)
 const userCollection=collection(db,"users")
 const [user,setUsers]=useState({})
 const [list,setList]=useState([])
@@ -11,10 +13,21 @@ const [search,setSearch]=useState("")
 const [err,setErr]=useState("")
 const [loading,setLoading]=useState(false)
 const [reason,setReason]=useState("");
-  useEffect(()=>{
-   getUsers();
+const navigate = useNavigate();
+useEffect(()=>{
+    const p1=new Promise((resolve,reject)=>{
+      var v=window.localStorage.getItem('auth');
+      resolve(v)
+    })
+    Promise.all([p1]).then((value)=>{
+     if(value[0]=='false' || value[0]==null  ){
+      navigate('/login')
+    }
+    })
+       getUsers();
   },[])
   const getUsers=async ()=>{
+    setLoading(true)
 const g=query(collection(db, "users"), where("approval", "==",'pending'));
 
     const data =await  getDocs(g);
@@ -33,7 +46,7 @@ const g=query(collection(db, "users"), where("approval", "==",'pending'));
     // }
    
     // console.log(JSON.stringify({"data":data._userDataWriter}))
-
+    setLoading(false)
   }
   const find=()=>{
 getUsers()
@@ -98,8 +111,8 @@ const data = {
 
 
      {list.filter(function (el) {
-        var condition = new RegExp(search)
-  return condition.test(el.fullname);
+         var condition = new RegExp(search.toUpperCase() )
+         return condition.test(el.fullname.toUpperCase());
 }).map((user,i)=>{
         return <div key={i} style={{display:'flex',maxWidth:500}} className="card3" > 
             

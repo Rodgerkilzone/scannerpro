@@ -9,12 +9,12 @@ const [user,setUsers]=useState({})
 const [search,setSearch]=useState("")
 const [err,setErr]=useState("")
 const [list,setList]=useState([])
-
+const [loading,setLoading]=useState(false)
   useEffect(()=>{
   //  getUsers();
   },[])
   const getUsers=async ()=>{
-
+    setLoading(true)
     const q = query(collection(db, "users"), where("idno", "==",search.replace(/(\r\n|\n|\r)/gm, "")), where("approval", "==",'approved'));
     const data =await  getDocs(q);
 
@@ -32,7 +32,7 @@ const [list,setList]=useState([])
     // }
    setList(obju)
     // console.log(JSON.stringify({"data":data._userDataWriter}))
-
+    setLoading(false)
   }
   const find=()=>{
 getUsers()
@@ -140,6 +140,16 @@ getUsers()
 
 
      </div>
+     {loading  && <div style={{width:'100vw',height:'100vh',position:'fixed',top:0,left:0,display:'flex',justifyContent:'center',alignItems:'center'}}>
+     <div style={{width:'100vw',background:'rgba(0,0,0,0.6)',zIndex:-2,height:'100vh',position:'fixed',top:0,left:0,display:'flex',justifyContent:'center',alignItems:'center'}}>
+     
+     </div>
+
+<div style={{background:'white',borderRadius:10,width:300,height:100,display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}><h3>Loading...</h3>
+
+</div>
+      
+     </div>}
        </div>
     }
     export default Id

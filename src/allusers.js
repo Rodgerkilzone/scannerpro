@@ -1,20 +1,37 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,useContext} from 'react'
 import {db} from './firebase-config'
 import { collection,getDocs, query, where,updateDoc,doc } from '@firebase/firestore';
 import QRCode from "react-qr-code";
+
+import {AppContext} from './App'
+import { useNavigate } from 'react-router-dom';
 const Allusers=()=>{
+const {auth}=useContext(AppContext)
 
 const userCollection=collection(db,"users")
 const [user,setUsers]=useState({})
 const [list,setList]=useState([])
 const [search,setSearch]=useState("")
 const [err,setErr]=useState("")
-
-
-  useEffect(()=>{
-   getUsers();
+const navigate = useNavigate();
+const [loading,setLoading]=useState(false)
+useEffect(()=>{
+    const p1=new Promise((resolve,reject)=>{
+      var v=window.localStorage.getItem('auth');
+      resolve(v)
+    })
+    Promise.all([p1]).then((value)=>{
+     if(value[0]=='false' || value[0]==null  ){
+      navigate('/login')
+    }
+    })
+     getUsers();
   },[])
+
+
+ 
   const getUsers=async ()=>{
+    setLoading(true)
 const g=query(collection(db, "users") );
 
     const data =await  getDocs(g);
@@ -33,7 +50,7 @@ const g=query(collection(db, "users") );
     // }
    
     // console.log(JSON.stringify({"data":data._userDataWriter}))
-
+    setLoading(false)
   }
   const find=()=>{
 getUsers()
@@ -90,8 +107,8 @@ const data = {
      )} */}
   <div style={{width:'100vw',display:'flex',flexWrap:'wrap',flexDirection:'row'}}>
   {list.filter(function (el) {
-        var condition = new RegExp(search)
-  return condition.test(el.fullname);
+        var condition = new RegExp(search.toUpperCase() )
+  return condition.test(el.fullname.toUpperCase());
 }).map((user,i)=>{
         return <div key={i} style={{display:'flex',maxWidth:500}} className="card3" > 
             
@@ -177,6 +194,16 @@ const data = {
      })}
     
      </div>
+     {loading  && <div style={{width:'100vw',height:'100vh',position:'fixed',top:0,left:0,display:'flex',justifyContent:'center',alignItems:'center'}}>
+     <div style={{width:'100vw',background:'rgba(0,0,0,0.6)',zIndex:-2,height:'100vh',position:'fixed',top:0,left:0,display:'flex',justifyContent:'center',alignItems:'center'}}>
+     
+     </div>
+
+<div style={{background:'white',borderRadius:10,width:300,height:100,display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}><h3>Loading...</h3>
+
+</div>
+      
+     </div>}
        </div>
     }
     export default Allusers

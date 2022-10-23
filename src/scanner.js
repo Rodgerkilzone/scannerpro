@@ -12,6 +12,7 @@ const Scan = () => {
   const [list,setList]=useState([])
   const [search2,setSearch]=useState("")
   const [err,setErr]=useState("")
+  const [loading,setLoading]=useState(false)
   const videoConstraints = {
     width: 480,
     height: 360,
@@ -25,7 +26,7 @@ const Scan = () => {
     },[search2])
     const getUsers=async (r)=>{
      
-        
+      setLoading(true)
   
         // setInterval(async ()=>{
           // setInterval(async ()=>{ 
@@ -68,7 +69,7 @@ const Scan = () => {
 
 
 
-    
+        setLoading(false)
      
            // console.log(JSON.stringify({"data":data._userDataWriter}))
     }
@@ -274,6 +275,17 @@ if(user['idno'].replace(/(\r\n|\n|\r)/gm, "")==search2.replace(/(\r\n|\n|\r)/gm,
       </div></div>
     })}
      </div>
+
+     {loading  && <div style={{width:'100vw',height:'100vh',position:'fixed',top:0,left:0,display:'flex',justifyContent:'center',alignItems:'center'}}>
+     <div style={{width:'100vw',background:'rgba(0,0,0,0.6)',zIndex:-2,height:'100vh',position:'fixed',top:0,left:0,display:'flex',justifyContent:'center',alignItems:'center'}}>
+     
+     </div>
+
+<div style={{background:'white',borderRadius:10,width:300,height:100,display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}><h3>Loading...</h3>
+
+</div>
+      
+     </div>}
        </div>
     </>
   );
